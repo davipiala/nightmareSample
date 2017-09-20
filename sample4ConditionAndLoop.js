@@ -18,32 +18,35 @@ function doExpect(nm, num){
         });
 }
 
+//メインロジック
 //yield を使のでfunction*
 function* searchNumber(nm){
-    let min=1,max=100;
+    let min=1,max=100;  //予想範囲
     let hint='';
     let times='';
-    while(hint!='correct!'){
-        let expectedNum=Math.floor((min + max)/2);
-        let doc=yield doExpect(nm,expectedNum);
-        const $ = cheerio.load(doc);
+    while(hint!='correct!'){    ///正解するまでループ
+        let expectedNum=Math.floor((min + max)/2);  //番号を予想（予想範囲の真ん中を使う）して
+        let doc=yield doExpect(nm,expectedNum);     //お伺いを立てる
+        const $ = cheerio.load(doc);                //結果をパース
         hint = $("#hint").text();
         times= $("#times").text();
         console.log(min + '<' + expectedNum + '<' + max + ':' + hint);
-        if( hint=='low'){
+        if( hint=='low'){   //結果をもとに、番号予想範囲を狭める
             min=expectedNum;
         } else if(hint=='high'){
             max=expectedNum;
         }
     }
-    return parseInt(times);
+    return parseInt(times); //成功までに要した試行回数を返す。
     
 }
+//全体処理
 vo(function* () {
     let nightmare = Nightmare({ show: true });
-    yield gotoHighLow(nightmare);
-    yield searchNumber(nightmare);
-    yield nightmare.end();
+    yield gotoHighLow(nightmare);       //ゲームページに移動
+    let times=yield searchNumber(nightmare);      // ゲームします
+    yield nightmare.end();              //　終わります
+    return times;
 })(function (err, result) {
     if (err) return console.log(err);
     console.log(result + "Times");
