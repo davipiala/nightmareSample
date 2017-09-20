@@ -9,7 +9,8 @@
     <div>
         Random=<sapn id='val'>{{val}}</span><br>
         Hint:<sapn id='hint'>{{hint}}</span><br>
-        <input id="suspect" type="text" ng-model="suspectNum"/>
+        <input id="expect" type="text" ng-model="expectNum"/><input type="button" ng-click="doExpect()" value="expect!" id="doExpect"/><br>
+        you guessed {{challenge}} times.
     </div>
 </body>
 <script>
@@ -18,10 +19,12 @@
     app.controller("ctrl", function ($scope, $interval) {
         var min = 1 ,max = 100 ;
         $scope.val = Math.floor( Math.random() * (max + 1 - min) ) + min ;
-        $scope.$watch('suspectNum',function(newVal, oldVal){
+        $scope.challenge=0;
+        $scope.doExpect=function(){
             $scope.hint="";
-            var num=parseInt(newVal, 10);
+            var num=parseInt($scope.expectNum, 10);
             if(!isNaN(num)){
+                $scope.challenge++;
                 if(num==$scope.val){
                     $scope.hint="correct!";
                 } else if(num<$scope.val){
@@ -30,7 +33,7 @@
                     $scope.hint="higth";
                 }
             }
-        });
+        };
     });
 </script>
 
