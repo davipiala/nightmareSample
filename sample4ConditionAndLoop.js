@@ -18,15 +18,14 @@ function doExpect(nm, num){
         });
 }
 
-vo(function* () {
-    let nightmare = Nightmare({ show: true });
-    yield gotoHighLow(nightmare);
+//yield を使のでfunction*
+function* searchNumber(nm){
     let min=1,max=100;
     let hint='';
     let times='';
     while(hint!='correct!'){
         let expectedNum=Math.floor((min + max)/2);
-        let doc=yield doExpect(nightmare,expectedNum);
+        let doc=yield doExpect(nm,expectedNum);
         const $ = cheerio.load(doc);
         hint = $("#hint").text();
         times= $("#times").text();
@@ -37,10 +36,14 @@ vo(function* () {
             max=expectedNum;
         }
     }
-
-
+    return parseInt(times);
+    
+}
+vo(function* () {
+    let nightmare = Nightmare({ show: true });
+    yield gotoHighLow(nightmare);
+    yield searchNumber(nightmare);
     yield nightmare.end();
-    return times;
 })(function (err, result) {
     if (err) return console.log(err);
     console.log(result + "Times");
