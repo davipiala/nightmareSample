@@ -1,0 +1,37 @@
+<!doctype html>
+<html ng-app="app">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.5/angular.min.js"></script>
+</head>
+
+<body ng-controller="ctrl">
+    <div>
+        Random=<sapn id='val'>{{val}}</span><br>
+        Hint:<sapn id='hint'>{{hint}}</span><br>
+        <input id="suspect" type="text" ng-model="suspectNum"/>
+    </div>
+</body>
+<script>
+    var app = angular.module("app", []);
+
+    app.controller("ctrl", function ($scope, $interval) {
+        var min = 1 ,max = 100 ;
+        $scope.val = Math.floor( Math.random() * (max + 1 - min) ) + min ;
+        $scope.$watch('suspectNum',function(newVal, oldVal){
+            $scope.hint="";
+            var num=parseInt(newVal, 10);
+            if(!isNaN(num)){
+                if(num==$scope.val){
+                    $scope.hint="correct!";
+                } else if(num<$scope.val){
+                    $scope.hint="low";
+                } else {
+                    $scope.hint="higth";
+                }
+            }
+        });
+    });
+</script>
+
+</html>
