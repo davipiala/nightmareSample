@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "sample5": "forever start sample5SS.js"
+    "forever-sample6": "forever start sample6forever.js",
+    "forever-stopall": "forever stopall"
   },
   "author": "",
   "license": "ISC",
