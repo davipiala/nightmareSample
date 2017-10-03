@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "forever-sample5-cli": "xvfb-run forever start sample5SS.js",
     "forever-sample6": "forever start sample6forever.js",
     "forever-stopall": "forever stopall"
   },
